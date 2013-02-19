@@ -24,17 +24,36 @@
 		(filter (fn [[a b]] (not (= a b)))
 			(repeatedly 
 				#(random-pair nodes-vector) ))))
+(defn double-edge [[a b]]
+	[[a b] [b a]])
+(defn bi-di-edges [edges]
+	(if (empty? edges) 
+		nil
+		(lazy-cat (double-edge (first edges)) (bi-di-edges (rest edges)))))
 
 (defn pair-with [xs x] (map #(vector % x) xs))
 (defn pair-wise [bounded infinite] (mapcat #(pair-with bounded %) infinite))
 (defn seq-to-str [xs] (reduce #(str %1 %2) "" xs))
 (defn labels [] (map (comp keyword seq-to-str) (pair-wise "abcdefg" (iterate inc 0))))
+(defn all-pairs [xs] (if (empty? xs) nil (concat (pair-with (rest xs) (first xs)) (all-pairs (rest xs)))))
 
 (defn factorial [n] (reduce * (range 1 (inc n))))
 
-(defn random-graph [n k]
+(defn random-graph-directed [n k]
 	(let [nodes (set (take n (labels)))
 	      edges (set (take (* k (factorial (dec n))) (random-edges nodes))) ]
+	     {:nodes nodes, :edges edges}))
+(defn random-graph-non-directed [n k]
+	(let [nodes (set (take n (labels)))
+	      edges (set (take (* 2 k (factorial (dec n))) (bi-di-edges (random-edges nodes)))) ]
+	     {:nodes nodes, :edges edges}))
+(defn probabilistic-graph [n p]
+	(let [nodes (set (take n (labels)))
+		  edges (set (filter #(let [_ %] (< (rand) p)) (all-pairs nodes)))]
+	     {:nodes nodes, :edges edges}))
+(defn probabilistic-graph-non-directed [n p]
+	(let [nodes (set (take n (labels)))
+		  edges (set (bi-di-edges (filter #(let [_ %] (< (rand) p)) (all-pairs nodes))))]
 	     {:nodes nodes, :edges edges}))
 
 
