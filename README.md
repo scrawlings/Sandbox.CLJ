@@ -15,7 +15,9 @@ The free creative commons text can be found here: http://www.greenteapress.com/c
 Exercises and examples from Clojure Programming
 -----------------------------------------------
 
-I rather like the scope and style of this book. Sometimes it leaves me dumbstruck how a good abstraction can make short work of things that hard in other languages. There are some great non-trivial examples in the book
+I rather like the scope and style of this book, (http://shop.oreilly.com/product/0636920013754.do). 
+
+Sometimes it leaves me dumbstruck how a good abstraction can make short work of things that hard in other languages. There are some great non-trivial examples in the book.
 
 
 N.B. there may be JavaScipt
