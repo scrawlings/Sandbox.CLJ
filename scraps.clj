@@ -37,3 +37,13 @@ otherthings
 (defn a [x] (if (> x 0) (b (dec x)) :a))
 (defn b [x] (if (> x 0) (a (dec x)) :b))
 
+
+
+(defn base-counter 
+  ([bases n] (base-counter bases n []))
+  ([bases n result]
+  (if (empty? (rest bases)) 
+    (conj result n)
+    (let [factor (apply * (rest bases))]
+      (recur (rest bases) (rem n factor) (conj result (quot n factor)))))))
+(base-counter [3 4 5] 17)
